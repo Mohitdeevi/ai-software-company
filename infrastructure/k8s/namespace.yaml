@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: promptcorp
+  labels:
+    app: promptcorp-os
+    environment: production

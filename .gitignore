@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.local
+.next/
+coverage/
+dist/
+*.log
+.DS_Store
+thumbs.db
+temp_auto_push.bat
+temp_interactive_push.bat
+branch_structure.json

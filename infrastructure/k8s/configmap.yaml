@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: promptcorp-config
+  namespace: promptcorp
+  labels:
+    app: promptcorp-os
+    environment: production
+data:
+  NODE_ENV: production
+  PORT: "4000"
+  CORS_ORIGIN: https://promptcorp.example.com
+  LOG_LEVEL: info
+  MONGODB_URI: mongodb://mongodb-service:27017/promptcorp
+  REDIS_URL: redis://redis-service:6379
+  LLM_API_URL: https://api.anthropic.com/v1
+  LLM_MODEL: claude-sonnet-4-6

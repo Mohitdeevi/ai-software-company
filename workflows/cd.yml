@@ -1,0 +1,85 @@
+# ============================================
+# PromptCorp OS - CD Pipeline
+# Build, push, and deploy to Kubernetes
+# ============================================
+
+name: CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  # ---- Deploy Job ----
+  deploy:
+    name: Build, Push & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.REGISTRY_URL }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # ---- Build and Push Backend Image ----
+      - name: Build and push backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./infrastructure/docker/Dockerfile.backend
+          push: true
+          tags: |
+            ${{ secrets.REGISTRY_URL }}/promptcorp-backend:${{ github.sha }}
+            ${{ secrets.REGISTRY_URL }}/promptcorp-backend:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # ---- Build and Push Frontend Image ----
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./infrastructure/docker/Dockerfile.frontend
+          push: true
+          tags: |
+            ${{ secrets.REGISTRY_URL }}/promptcorp-frontend:${{ github.sha }}
+            ${{ secrets.REGISTRY_URL }}/promptcorp-frontend:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # ---- Update Kubernetes Manifests ----
+      - name: Update backend k8s manifest with new image tag
+        run: |
+          sed -i "s|image:.*promptcorp-backend.*|image: ${{ secrets.REGISTRY_URL }}/promptcorp-backend:${{ github.sha }}|g" \
+            infrastructure/k8s/backend-deployment.yaml
+
+      - name: Update frontend k8s manifest with new image tag
+        run: |
+          sed -i "s|image:.*promptcorp-frontend.*|image: ${{ secrets.REGISTRY_URL }}/promptcorp-frontend:${{ github.sha }}|g" \
+            infrastructure/k8s/frontend-deployment.yaml
+
+      # ---- Deploy to Kubernetes ----
+      - name: Configure kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: "latest"
+
+      - name: Set Kubernetes context
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
+
+      - name: Apply Kubernetes manifests
+        run: |
+          kubectl apply -f infrastructure/k8s/
+          kubectl rollout status deployment/promptcorp-backend --timeout=300s
+          kubectl rollout status deployment/promptcorp-frontend --timeout=300s

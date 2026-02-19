@@ -1,0 +1,82 @@
+# ============================================
+# PromptCorp OS - Docker Compose
+# Local development environment
+# ============================================
+
+version: "3.9"
+
+services:
+  # ---- Backend API Service ----
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../infrastructure/docker/Dockerfile.backend
+    container_name: promptcorp-backend
+    ports:
+      - "4000:4000"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    volumes:
+      - ./backend/src:/app/src
+    networks:
+      - promptcorp-network
+    restart: unless-stopped
+
+  # ---- Frontend Next.js Service ----
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../infrastructure/docker/Dockerfile.frontend
+    container_name: promptcorp-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - promptcorp-network
+    restart: unless-stopped
+
+  # ---- MongoDB Database ----
+  mongodb:
+    image: mongo:7
+    container_name: promptcorp-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - promptcorp-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  # ---- Redis Cache ----
+  redis:
+    image: redis/redis-stack:7.4.0-v1
+    container_name: promptcorp-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - promptcorp-network
+    restart: unless-stopped
+
+# ---- Networks ----
+networks:
+  promptcorp-network:
+    driver: bridge
+
+# ---- Volumes ----
+volumes:
+  mongodb_data:
+  redis_data:

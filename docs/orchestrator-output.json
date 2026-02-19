@@ -1,0 +1,930 @@
+{
+  "meta": {
+    "product_name": "PromptCorp OS",
+    "version": "1.0.0",
+    "tagline": "One Prompt → Fully Operational Software Company",
+    "generated_at": "2026-02-19T00:00:00Z",
+    "orchestrator_version": "1.0.0",
+    "execution_phases": 9,
+    "agents_deployed": 11
+  },
+
+  "strategic_plan": {
+    "agent": "Manager + Sales",
+    "business_objective": "Build a multi-agent orchestration platform that transforms a single user prompt into a production-ready software application with CI/CD, containerization, Kubernetes deployment, and monitoring",
+    "target_users": [
+      "Solo founders and indie hackers",
+      "Small engineering teams (2-10 people)",
+      "Startup CTOs without DevOps capacity",
+      "Agencies building MVPs for clients",
+      "Enterprise innovation labs prototyping new products"
+    ],
+    "ideal_customer_profile": {
+      "primary": "Technical founders who can evaluate output but lack time/team to build end-to-end",
+      "secondary": "Non-technical founders with basic technical literacy",
+      "tertiary": "Engineering teams automating boilerplate and infra setup"
+    },
+    "revenue_model": {
+      "type": "usage_based_with_tiers",
+      "free_tier": "3 projects/month, community stack only",
+      "pro_tier": "$49/month - 20 projects, all stacks, priority queue",
+      "team_tier": "$199/month - unlimited projects, custom agents, private repos",
+      "enterprise_tier": "Custom pricing - self-hosted, SSO, audit logs"
+    },
+    "go_to_market": {
+      "phase_1": "Developer community launch (Twitter/X, Reddit, HackerNews)",
+      "phase_2": "Product Hunt launch with demo video",
+      "phase_3": "Content marketing - blog posts showing prompt-to-production workflows",
+      "phase_4": "Enterprise outreach via LinkedIn and direct sales"
+    },
+    "constraints": [
+      "v1 locked to Node.js + MongoDB + Next.js + Redis stack",
+      "No arbitrary shell execution outside sandboxed containers",
+      "Maximum 3 retry loops per failing component",
+      "Hard token budget cap per project generation",
+      "All agent outputs must be structured JSON"
+    ],
+    "non_goals": [
+      "Supporting every programming language in v1",
+      "Real-time collaborative editing",
+      "Visual drag-and-drop UI builder",
+      "Mobile app generation",
+      "Database migration tooling"
+    ],
+    "success_metrics": {
+      "build_success_rate": ">= 80% on first attempt",
+      "time_to_production": "< 15 minutes for standard CRUD apps",
+      "iteration_cycles": "<= 3 average retry cycles before stable build",
+      "cost_per_build": "< $2 average LLM cost per project"
+    }
+  },
+
+  "product_requirements": {
+    "agent": "Product Manager",
+    "features": [
+      {
+        "id": "F001",
+        "name": "Prompt Intake & Validation",
+        "description": "Accept user prompt, validate intent, extract requirements using NLP",
+        "priority": "P0",
+        "user_stories": [
+          "As a user, I can enter a single prompt describing my app idea",
+          "As a user, I receive structured feedback if my prompt is too vague",
+          "As a user, I can see extracted requirements before generation begins"
+        ],
+        "acceptance_criteria": [
+          "Prompt must be >= 10 characters",
+          "System extracts: app type, target users, core features, auth needs",
+          "User can confirm or edit extracted requirements"
+        ]
+      },
+      {
+        "id": "F002",
+        "name": "Agent Orchestration Engine",
+        "description": "Sequential execution of all 11 agents with structured I/O",
+        "priority": "P0",
+        "user_stories": [
+          "As the system, I execute agents in deterministic order",
+          "As a user, I can see which agent is currently active",
+          "As a user, I can see real-time progress of each phase"
+        ],
+        "acceptance_criteria": [
+          "Agents execute in defined phase order",
+          "Each agent receives structured input and returns structured JSON",
+          "Failed agents retry up to 3 times before escalation",
+          "Execution state persisted to MongoDB between phases"
+        ]
+      },
+      {
+        "id": "F003",
+        "name": "Code Generation Engine",
+        "description": "File-by-file code generation for backend and frontend",
+        "priority": "P0",
+        "user_stories": [
+          "As a user, I receive individually generated source files",
+          "As a user, I can preview generated code before building",
+          "As a user, the generated code follows best practices"
+        ],
+        "acceptance_criteria": [
+          "Each file generated independently with proper imports",
+          "Generated code passes ESLint and TypeScript checks",
+          "Folder structure matches architect agent output",
+          "Environment variables extracted to .env template"
+        ]
+      },
+      {
+        "id": "F004",
+        "name": "Build & Test Pipeline",
+        "description": "Automated build, dependency installation, and test execution in sandbox",
+        "priority": "P0",
+        "user_stories": [
+          "As a user, my generated app is automatically built and tested",
+          "As a user, I see build errors with suggested fixes",
+          "As a user, failed builds auto-retry with fixes applied"
+        ],
+        "acceptance_criteria": [
+          "Docker sandbox executes npm install + build",
+          "Test suite runs automatically after build",
+          "Build errors captured and fed back to developer agent",
+          "Maximum 3 retry cycles"
+        ]
+      },
+      {
+        "id": "F005",
+        "name": "Infrastructure Generation",
+        "description": "Generate Docker, CI/CD, and Kubernetes configs",
+        "priority": "P1",
+        "user_stories": [
+          "As a user, I receive production-ready Dockerfiles",
+          "As a user, I receive GitHub Actions CI/CD pipelines",
+          "As a user, I receive Kubernetes deployment manifests"
+        ],
+        "acceptance_criteria": [
+          "Dockerfile uses multi-stage build with non-root user",
+          "CI pipeline includes lint, test, build, push stages",
+          "K8s manifests include Deployment, Service, Ingress, HPA, ConfigMap, Secret template"
+        ]
+      },
+      {
+        "id": "F006",
+        "name": "Project Dashboard",
+        "description": "Web UI showing project status, agent progress, build logs, and generated output",
+        "priority": "P1",
+        "user_stories": [
+          "As a user, I can see all my projects in a dashboard",
+          "As a user, I can view real-time agent execution progress",
+          "As a user, I can browse generated files and download the project"
+        ],
+        "acceptance_criteria": [
+          "Dashboard lists all user projects with status",
+          "Real-time progress via WebSocket or SSE",
+          "File browser with syntax highlighting",
+          "Download as .zip or push to GitHub"
+        ]
+      },
+      {
+        "id": "F007",
+        "name": "GitHub Integration",
+        "description": "Auto-create repo, commit generated code, configure branch strategy",
+        "priority": "P2",
+        "user_stories": [
+          "As a user, I can connect my GitHub account",
+          "As a user, the system auto-creates a repo for my project",
+          "As a user, generated code is committed per sprint"
+        ],
+        "acceptance_criteria": [
+          "OAuth-based GitHub authentication",
+          "Repo created with proper .gitignore and README",
+          "Code committed with meaningful commit messages",
+          "Branch protection rules suggested"
+        ]
+      },
+      {
+        "id": "F008",
+        "name": "Observability Setup",
+        "description": "Generate monitoring, logging, and alerting configuration",
+        "priority": "P2",
+        "user_stories": [
+          "As a user, my generated app includes health check endpoints",
+          "As a user, I receive Prometheus metrics configuration",
+          "As a user, I receive structured logging setup"
+        ],
+        "acceptance_criteria": [
+          "Health check endpoint at /health and /ready",
+          "Prometheus metrics at /metrics",
+          "Structured JSON logging with correlation IDs",
+          "K8s liveness and readiness probes configured"
+        ]
+      }
+    ],
+    "edge_cases": [
+      "User prompt is a single word (e.g., 'Twitter')",
+      "User requests unsupported tech stack",
+      "Generated code has circular dependencies",
+      "MongoDB connection fails during sandbox build",
+      "Token budget exceeded mid-generation",
+      "Concurrent project generation by same user",
+      "Network failure during GitHub push"
+    ]
+  },
+
+  "sprint_plan": {
+    "agent": "Scrum Master",
+    "methodology": "2-week sprints",
+    "sprints": [
+      {
+        "id": "S1",
+        "name": "Foundation Sprint",
+        "duration": "2 weeks",
+        "goal": "Core backend API, auth, database models, project CRUD",
+        "tasks": [
+          "Initialize Node.js + Express backend",
+          "Configure MongoDB connection with Mongoose",
+          "Configure Redis connection",
+          "Implement JWT auth (register, login, refresh)",
+          "Create User model with RBAC",
+          "Create Project model",
+          "Create Agent Execution model",
+          "Build project CRUD endpoints",
+          "Setup error handling middleware",
+          "Setup request validation with Zod",
+          "Write unit tests for auth and project endpoints"
+        ]
+      },
+      {
+        "id": "S2",
+        "name": "Orchestration Sprint",
+        "duration": "2 weeks",
+        "goal": "Agent orchestration engine, prompt processing, phase execution",
+        "tasks": [
+          "Build prompt intake and validation service",
+          "Build agent orchestration engine (sequential executor)",
+          "Implement Manager Agent logic",
+          "Implement Sales Agent logic",
+          "Implement Product Manager Agent logic",
+          "Implement Scrum Master Agent logic",
+          "Implement Architect Agent logic",
+          "Build phase state machine with Redis",
+          "Add retry logic (max 3) per agent",
+          "Persist agent outputs to MongoDB",
+          "Add WebSocket/SSE for real-time progress"
+        ]
+      },
+      {
+        "id": "S3",
+        "name": "Code Generation Sprint",
+        "duration": "2 weeks",
+        "goal": "Developer agents, code generation, file output",
+        "tasks": [
+          "Implement Backend Developer Agent",
+          "Implement Frontend Developer Agent",
+          "Build file-by-file code generation engine",
+          "Implement template system for generated code",
+          "Build token-aware chunking for large projects",
+          "Generate Mongoose models from architect schema",
+          "Generate Express routes from API spec",
+          "Generate Next.js pages from frontend plan",
+          "Write generated code to project workspace",
+          "Implement code validation (lint + typecheck)"
+        ]
+      },
+      {
+        "id": "S4",
+        "name": "Build & Test Sprint",
+        "duration": "2 weeks",
+        "goal": "Sandbox execution, build pipeline, test runner, self-healing loop",
+        "tasks": [
+          "Implement QA/Test Agent",
+          "Build Docker sandbox executor",
+          "Implement npm install + build pipeline",
+          "Implement test runner in sandbox",
+          "Build self-healing loop (error capture → fix → retry)",
+          "Implement DevOps Agent (Dockerfile, CI/CD, K8s generation)",
+          "Implement Security Agent (validation, audit)",
+          "Implement Observability Agent (health, metrics, logging)",
+          "Build project download/export endpoint",
+          "Write integration tests for full pipeline"
+        ]
+      },
+      {
+        "id": "S5",
+        "name": "Frontend Dashboard Sprint",
+        "duration": "2 weeks",
+        "goal": "Next.js dashboard, project management UI, real-time progress",
+        "tasks": [
+          "Initialize Next.js frontend with App Router",
+          "Build auth pages (login, register)",
+          "Build project dashboard page",
+          "Build new project creation flow",
+          "Build real-time agent progress view",
+          "Build generated file browser with syntax highlighting",
+          "Build project download UI",
+          "Build settings and profile pages",
+          "Implement responsive design with TailwindCSS",
+          "Write E2E tests with Playwright"
+        ]
+      },
+      {
+        "id": "S6",
+        "name": "Infrastructure & Launch Sprint",
+        "duration": "2 weeks",
+        "goal": "Docker, CI/CD, K8s, monitoring, production deployment",
+        "tasks": [
+          "Write production Dockerfiles (backend + frontend)",
+          "Write Docker Compose for local dev",
+          "Write GitHub Actions CI/CD pipelines",
+          "Write Kubernetes manifests",
+          "Configure Prometheus + health checks",
+          "Setup structured logging",
+          "Implement rate limiting",
+          "Security audit and hardening",
+          "Load testing",
+          "Production deployment"
+        ]
+      }
+    ]
+  },
+
+  "architecture_design": {
+    "agent": "Architect",
+    "architecture_type": "modular_monolith",
+    "rationale": "Single deployable unit with clear module boundaries. Avoids microservice overhead for v1 while maintaining clean separation for future extraction.",
+    "api_style": "REST",
+    "api_versioning": "URL prefix /api/v1",
+    "database": {
+      "primary": "MongoDB",
+      "odm": "Mongoose",
+      "collections": [
+        {
+          "name": "users",
+          "purpose": "User accounts and authentication",
+          "indexes": ["email (unique)", "createdAt"],
+          "fields": {
+            "_id": "ObjectId",
+            "email": "String (unique, indexed)",
+            "passwordHash": "String",
+            "name": "String",
+            "role": "String (enum: admin, user)",
+            "plan": "String (enum: free, pro, team, enterprise)",
+            "githubToken": "String (encrypted, optional)",
+            "tokenUsage": "{ used: Number, limit: Number, resetAt: Date }",
+            "createdAt": "Date",
+            "updatedAt": "Date"
+          }
+        },
+        {
+          "name": "projects",
+          "purpose": "User projects and generation state",
+          "indexes": ["userId", "status", "createdAt"],
+          "fields": {
+            "_id": "ObjectId",
+            "userId": "ObjectId (ref: users)",
+            "name": "String",
+            "prompt": "String",
+            "extractedRequirements": "Object",
+            "status": "String (enum: pending, processing, completed, failed)",
+            "currentPhase": "String",
+            "currentAgent": "String",
+            "retryCount": "Number (default: 0)",
+            "config": "{ stack: String, features: [String] }",
+            "outputs": "{ strategic_plan: Object, prd: Object, architecture: Object, backend_plan: Object, frontend_plan: Object, testing_plan: Object, devops_plan: Object, security_plan: Object, observability_plan: Object }",
+            "generatedFiles": "[{ path: String, content: String, language: String }]",
+            "buildLog": "[{ timestamp: Date, level: String, message: String }]",
+            "githubRepo": "String (optional)",
+            "createdAt": "Date",
+            "updatedAt": "Date"
+          }
+        },
+        {
+          "name": "agent_executions",
+          "purpose": "Audit log of every agent execution",
+          "indexes": ["projectId", "agentName", "createdAt"],
+          "fields": {
+            "_id": "ObjectId",
+            "projectId": "ObjectId (ref: projects)",
+            "agentName": "String",
+            "phase": "String",
+            "input": "Object",
+            "output": "Object",
+            "tokenUsage": "{ prompt: Number, completion: Number, total: Number }",
+            "duration_ms": "Number",
+            "status": "String (enum: success, failed, retrying)",
+            "errorMessage": "String (optional)",
+            "retryAttempt": "Number",
+            "createdAt": "Date"
+          }
+        },
+        {
+          "name": "templates",
+          "purpose": "Code templates for different file types",
+          "indexes": ["category", "name"],
+          "fields": {
+            "_id": "ObjectId",
+            "name": "String",
+            "category": "String (enum: model, controller, route, middleware, component, page, config)",
+            "language": "String",
+            "template": "String",
+            "variables": "[String]",
+            "createdAt": "Date"
+          }
+        }
+      ],
+      "schema_validation": "Mongoose schema-level validation with Zod for API input"
+    },
+    "cache_and_queue": {
+      "technology": "Redis Stack",
+      "usage": {
+        "job_queue": "Bull queue for agent execution jobs. Each project creates a job chain: phase1 → phase2 → ... → phase9",
+        "caching": "Cache LLM responses for identical prompts (TTL: 24h). Cache project status for dashboard polling.",
+        "session_store": "Redis-backed session store for WebSocket connections",
+        "rate_limiting": "Sliding window rate limiter per user per endpoint",
+        "execution_state": "Real-time phase/agent state for SSE progress streaming"
+      }
+    },
+    "auth_architecture": {
+      "strategy": "JWT with refresh tokens",
+      "access_token_ttl": "15 minutes",
+      "refresh_token_ttl": "7 days",
+      "storage": "Access token in memory, refresh token in httpOnly cookie",
+      "rbac_roles": ["admin", "user"],
+      "permissions": {
+        "admin": ["manage_users", "manage_templates", "view_all_projects", "system_config"],
+        "user": ["create_project", "view_own_projects", "download_project", "manage_profile"]
+      }
+    },
+    "rate_limiting": {
+      "strategy": "Sliding window with Redis",
+      "limits": {
+        "auth_endpoints": "5 requests per minute",
+        "project_creation": "10 per hour (free), 50 per hour (pro)",
+        "api_general": "100 requests per minute"
+      }
+    },
+    "folder_structure": {
+      "backend": {
+        "root": "backend/",
+        "tree": [
+          "src/",
+          "src/config/",
+          "src/config/db.js",
+          "src/config/redis.js",
+          "src/config/env.js",
+          "src/models/",
+          "src/models/User.js",
+          "src/models/Project.js",
+          "src/models/AgentExecution.js",
+          "src/models/Template.js",
+          "src/controllers/",
+          "src/controllers/authController.js",
+          "src/controllers/projectController.js",
+          "src/controllers/agentController.js",
+          "src/controllers/templateController.js",
+          "src/routes/",
+          "src/routes/auth.js",
+          "src/routes/projects.js",
+          "src/routes/agents.js",
+          "src/routes/templates.js",
+          "src/routes/health.js",
+          "src/middleware/",
+          "src/middleware/authenticate.js",
+          "src/middleware/authorize.js",
+          "src/middleware/validate.js",
+          "src/middleware/rateLimiter.js",
+          "src/middleware/errorHandler.js",
+          "src/services/",
+          "src/services/orchestrator.js",
+          "src/services/agents/",
+          "src/services/agents/managerAgent.js",
+          "src/services/agents/salesAgent.js",
+          "src/services/agents/productManagerAgent.js",
+          "src/services/agents/scrumMasterAgent.js",
+          "src/services/agents/architectAgent.js",
+          "src/services/agents/backendDevAgent.js",
+          "src/services/agents/frontendDevAgent.js",
+          "src/services/agents/testerAgent.js",
+          "src/services/agents/devopsAgent.js",
+          "src/services/agents/securityAgent.js",
+          "src/services/agents/observabilityAgent.js",
+          "src/services/codeGenerator.js",
+          "src/services/sandboxRunner.js",
+          "src/services/githubService.js",
+          "src/services/llmClient.js",
+          "src/queues/",
+          "src/queues/projectQueue.js",
+          "src/queues/workers/",
+          "src/queues/workers/orchestrationWorker.js",
+          "src/utils/",
+          "src/utils/logger.js",
+          "src/utils/tokenCounter.js",
+          "src/utils/errors.js",
+          "src/validators/",
+          "src/validators/authSchemas.js",
+          "src/validators/projectSchemas.js",
+          "src/app.js",
+          "src/server.js",
+          "tests/",
+          "tests/unit/",
+          "tests/integration/",
+          "tests/fixtures/"
+        ]
+      },
+      "frontend": {
+        "root": "frontend/",
+        "tree": [
+          "src/",
+          "src/app/",
+          "src/app/layout.tsx",
+          "src/app/page.tsx",
+          "src/app/(auth)/",
+          "src/app/(auth)/login/page.tsx",
+          "src/app/(auth)/register/page.tsx",
+          "src/app/(dashboard)/",
+          "src/app/(dashboard)/layout.tsx",
+          "src/app/(dashboard)/projects/page.tsx",
+          "src/app/(dashboard)/projects/[id]/page.tsx",
+          "src/app/(dashboard)/projects/new/page.tsx",
+          "src/app/(dashboard)/settings/page.tsx",
+          "src/components/",
+          "src/components/ui/",
+          "src/components/layout/",
+          "src/components/projects/",
+          "src/components/agents/",
+          "src/lib/",
+          "src/lib/api.ts",
+          "src/lib/auth.ts",
+          "src/lib/utils.ts",
+          "src/hooks/",
+          "src/hooks/useAuth.ts",
+          "src/hooks/useProject.ts",
+          "src/hooks/useSSE.ts",
+          "src/types/",
+          "src/types/index.ts",
+          "public/"
+        ]
+      }
+    },
+    "security_model": {
+      "input_validation": "Zod schemas on all API endpoints",
+      "mongo_injection_prevention": "Mongoose sanitization + express-mongo-sanitize",
+      "xss_prevention": "helmet + DOMPurify on frontend",
+      "cors": "Whitelist-based CORS configuration",
+      "secrets": "Environment variables, never hardcoded",
+      "dependencies": "npm audit in CI pipeline"
+    }
+  },
+
+  "backend_plan": {
+    "agent": "Backend Developer",
+    "runtime": "Node.js 20 LTS",
+    "framework": "Express 4.x",
+    "database": "MongoDB 7.x with Mongoose 8.x",
+    "cache": "Redis Stack 7.x with BullMQ",
+    "language": "JavaScript (ES2022+)",
+    "key_dependencies": [
+      "express",
+      "mongoose",
+      "ioredis",
+      "bullmq",
+      "jsonwebtoken",
+      "bcryptjs",
+      "zod",
+      "helmet",
+      "cors",
+      "morgan",
+      "express-mongo-sanitize",
+      "express-rate-limit",
+      "rate-limit-redis",
+      "pino",
+      "prom-client",
+      "dotenv",
+      "uuid"
+    ],
+    "dev_dependencies": [
+      "jest",
+      "supertest",
+      "mongodb-memory-server",
+      "nodemon",
+      "eslint"
+    ],
+    "environment_variables": [
+      "NODE_ENV",
+      "PORT",
+      "MONGODB_URI",
+      "REDIS_URL",
+      "JWT_SECRET",
+      "JWT_REFRESH_SECRET",
+      "JWT_EXPIRY",
+      "JWT_REFRESH_EXPIRY",
+      "LLM_API_KEY",
+      "LLM_API_URL",
+      "LLM_MODEL",
+      "GITHUB_CLIENT_ID",
+      "GITHUB_CLIENT_SECRET",
+      "CORS_ORIGIN",
+      "LOG_LEVEL",
+      "RATE_LIMIT_WINDOW_MS",
+      "RATE_LIMIT_MAX"
+    ],
+    "api_endpoints": [
+      { "method": "POST", "path": "/api/v1/auth/register", "description": "Register new user" },
+      { "method": "POST", "path": "/api/v1/auth/login", "description": "Login and get tokens" },
+      { "method": "POST", "path": "/api/v1/auth/refresh", "description": "Refresh access token" },
+      { "method": "POST", "path": "/api/v1/auth/logout", "description": "Invalidate refresh token" },
+      { "method": "GET", "path": "/api/v1/auth/me", "description": "Get current user profile" },
+      { "method": "GET", "path": "/api/v1/projects", "description": "List user projects" },
+      { "method": "POST", "path": "/api/v1/projects", "description": "Create new project from prompt" },
+      { "method": "GET", "path": "/api/v1/projects/:id", "description": "Get project details" },
+      { "method": "DELETE", "path": "/api/v1/projects/:id", "description": "Delete project" },
+      { "method": "GET", "path": "/api/v1/projects/:id/files", "description": "List generated files" },
+      { "method": "GET", "path": "/api/v1/projects/:id/files/:path", "description": "Get file content" },
+      { "method": "GET", "path": "/api/v1/projects/:id/logs", "description": "Get build logs" },
+      { "method": "GET", "path": "/api/v1/projects/:id/download", "description": "Download project as zip" },
+      { "method": "POST", "path": "/api/v1/projects/:id/retry", "description": "Retry failed build" },
+      { "method": "GET", "path": "/api/v1/projects/:id/stream", "description": "SSE stream for real-time progress" },
+      { "method": "GET", "path": "/api/v1/templates", "description": "List code templates (admin)" },
+      { "method": "POST", "path": "/api/v1/templates", "description": "Create template (admin)" },
+      { "method": "GET", "path": "/health", "description": "Health check" },
+      { "method": "GET", "path": "/ready", "description": "Readiness check" },
+      { "method": "GET", "path": "/metrics", "description": "Prometheus metrics" }
+    ],
+    "error_handling": {
+      "strategy": "Centralized error handler middleware",
+      "error_classes": ["ValidationError", "AuthenticationError", "AuthorizationError", "NotFoundError", "ConflictError", "RateLimitError", "ExternalServiceError"],
+      "response_format": "{ success: false, error: { code: string, message: string, details?: object } }"
+    }
+  },
+
+  "frontend_plan": {
+    "agent": "Frontend Developer",
+    "framework": "Next.js 14 (App Router)",
+    "language": "TypeScript",
+    "styling": "TailwindCSS + shadcn/ui components",
+    "state_management": "React Context + SWR for server state",
+    "key_dependencies": [
+      "next",
+      "react",
+      "tailwindcss",
+      "swr",
+      "axios",
+      "zod",
+      "lucide-react",
+      "@radix-ui/react-dialog",
+      "@radix-ui/react-dropdown-menu",
+      "@radix-ui/react-tabs",
+      "class-variance-authority",
+      "clsx",
+      "tailwind-merge",
+      "react-syntax-highlighter",
+      "react-hot-toast"
+    ],
+    "pages": [
+      { "path": "/", "description": "Landing page with product info and CTA" },
+      { "path": "/login", "description": "Login form" },
+      { "path": "/register", "description": "Registration form" },
+      { "path": "/dashboard", "description": "Project list with status cards" },
+      { "path": "/projects/new", "description": "New project creation with prompt input" },
+      { "path": "/projects/[id]", "description": "Project detail - agent progress, file browser, logs" },
+      { "path": "/settings", "description": "User profile and settings" }
+    ],
+    "components": {
+      "ui": ["Button", "Input", "Card", "Badge", "Dialog", "DropdownMenu", "Tabs", "Progress", "Skeleton", "Toast"],
+      "layout": ["Header", "Sidebar", "Footer", "DashboardLayout"],
+      "projects": ["ProjectCard", "ProjectList", "PromptInput", "RequirementsPreview", "AgentProgress", "PhaseTimeline", "FileBrowser", "CodeViewer", "BuildLog", "DownloadButton"],
+      "agents": ["AgentStatusBadge", "AgentOutputPanel", "ExecutionTimeline"]
+    },
+    "auth_handling": {
+      "strategy": "httpOnly cookie for refresh token, in-memory access token",
+      "protected_routes": "Middleware-based route protection via Next.js middleware.ts",
+      "token_refresh": "Automatic refresh on 401 response via Axios interceptor"
+    }
+  },
+
+  "testing_plan": {
+    "agent": "Tester",
+    "unit_tests": {
+      "framework": "Jest",
+      "coverage_target": ">= 80%",
+      "targets": [
+        "Mongoose model validations",
+        "Auth service (register, login, token generation)",
+        "Orchestrator phase execution logic",
+        "Individual agent prompt construction",
+        "Code generator template rendering",
+        "Validation schemas",
+        "Error handling middleware",
+        "Rate limiter logic",
+        "Token counter utility"
+      ]
+    },
+    "integration_tests": {
+      "framework": "Jest + Supertest",
+      "targets": [
+        "Full auth flow (register → login → refresh → logout)",
+        "Project CRUD endpoints",
+        "Project creation triggers orchestration queue",
+        "SSE stream returns real-time updates",
+        "Rate limiting blocks excessive requests",
+        "RBAC prevents unauthorized access",
+        "File download generates valid zip"
+      ],
+      "database": "mongodb-memory-server for isolated test DB"
+    },
+    "e2e_tests": {
+      "framework": "Playwright",
+      "targets": [
+        "User registration and login flow",
+        "Create new project from prompt",
+        "View project progress in real-time",
+        "Browse generated files",
+        "Download project",
+        "Logout flow"
+      ]
+    },
+    "edge_cases": [
+      "Empty prompt submission",
+      "Extremely long prompt (>10000 chars)",
+      "Concurrent project creation by same user",
+      "Agent timeout during LLM call",
+      "MongoDB connection drop mid-execution",
+      "Redis unavailable - graceful degradation",
+      "Invalid JWT token format",
+      "Expired refresh token",
+      "File browser with deeply nested paths"
+    ]
+  },
+
+  "devops_plan": {
+    "agent": "DevOps",
+    "docker": {
+      "backend_dockerfile": "Multi-stage: node:20-alpine build → node:20-alpine production, non-root user, health check",
+      "frontend_dockerfile": "Multi-stage: node:20-alpine build → node:20-alpine with standalone Next.js output, non-root user",
+      "docker_compose": "Services: backend, frontend, mongodb, redis. Volumes for data persistence. Network isolation."
+    },
+    "ci_cd": {
+      "platform": "GitHub Actions",
+      "ci_workflow": {
+        "trigger": "push to main, pull_request",
+        "steps": ["checkout", "setup node", "install deps", "lint", "unit tests", "integration tests", "build", "docker build", "push to registry"]
+      },
+      "cd_workflow": {
+        "trigger": "push to main (after CI passes)",
+        "steps": ["checkout", "build docker images", "push to container registry", "update k8s manifests", "apply to cluster"]
+      }
+    },
+    "kubernetes": {
+      "manifests": [
+        "namespace.yaml",
+        "backend-deployment.yaml",
+        "backend-service.yaml",
+        "frontend-deployment.yaml",
+        "frontend-service.yaml",
+        "mongodb-statefulset.yaml",
+        "mongodb-service.yaml",
+        "redis-deployment.yaml",
+        "redis-service.yaml",
+        "ingress.yaml",
+        "configmap.yaml",
+        "secret.yaml",
+        "hpa-backend.yaml",
+        "hpa-frontend.yaml"
+      ],
+      "hpa_config": {
+        "backend": { "min_replicas": 2, "max_replicas": 10, "cpu_target": 70 },
+        "frontend": { "min_replicas": 2, "max_replicas": 5, "cpu_target": 70 }
+      }
+    }
+  },
+
+  "security_plan": {
+    "agent": "Security",
+    "jwt_hardening": {
+      "algorithm": "HS256",
+      "short_lived_access": "15 min TTL",
+      "refresh_rotation": "New refresh token on each refresh",
+      "httpOnly_cookie": true,
+      "secure_cookie": true,
+      "sameSite": "strict"
+    },
+    "input_validation": {
+      "library": "Zod",
+      "strategy": "Validate all request bodies, params, and query strings at middleware level"
+    },
+    "mongo_injection": {
+      "library": "express-mongo-sanitize",
+      "strategy": "Sanitize all incoming request data, strip $ and . from keys"
+    },
+    "rate_limiting": {
+      "library": "express-rate-limit + rate-limit-redis",
+      "strategy": "Sliding window per IP and per user, stricter limits on auth endpoints"
+    },
+    "cors": {
+      "strategy": "Whitelist frontend origin only, no wildcard in production"
+    },
+    "headers": {
+      "library": "helmet",
+      "config": "Default helmet config with CSP tailored to Next.js"
+    },
+    "dependency_audit": {
+      "strategy": "npm audit in CI pipeline, fail build on critical vulnerabilities"
+    },
+    "sandbox_isolation": {
+      "strategy": "Docker containers with no network access, resource limits, read-only filesystem except /tmp"
+    }
+  },
+
+  "observability_plan": {
+    "agent": "Observability",
+    "logging": {
+      "library": "pino",
+      "format": "Structured JSON",
+      "fields": ["timestamp", "level", "requestId", "userId", "method", "path", "statusCode", "duration_ms", "message"],
+      "levels": "trace, debug, info, warn, error, fatal",
+      "production_level": "info"
+    },
+    "metrics": {
+      "library": "prom-client",
+      "endpoint": "/metrics",
+      "custom_metrics": [
+        "http_requests_total (counter) - labeled by method, path, status",
+        "http_request_duration_seconds (histogram) - labeled by method, path",
+        "active_projects_total (gauge) - currently processing projects",
+        "agent_execution_duration_seconds (histogram) - labeled by agent name",
+        "agent_execution_errors_total (counter) - labeled by agent name",
+        "llm_tokens_used_total (counter) - labeled by agent name, type (prompt/completion)",
+        "build_success_total (counter)",
+        "build_failure_total (counter)"
+      ]
+    },
+    "health_checks": {
+      "liveness": "GET /health - returns 200 if process is alive",
+      "readiness": "GET /ready - returns 200 if MongoDB and Redis are connected"
+    },
+    "tracing": {
+      "strategy": "Request ID (UUID) generated per request, passed through all service calls and log entries"
+    },
+    "alerting": {
+      "strategy": "Prometheus alerting rules",
+      "rules": [
+        "HighErrorRate: error_rate > 5% for 5 minutes",
+        "HighLatency: p99 > 5s for 5 minutes",
+        "BuildFailureSpike: failure_rate > 30% for 10 minutes",
+        "MongoDBDown: health check failing for 1 minute",
+        "RedisDown: readiness check failing for 1 minute",
+        "HighTokenUsage: daily token usage > 80% of budget"
+      ]
+    },
+    "kubernetes_probes": {
+      "liveness": { "path": "/health", "initialDelay": 10, "period": 30 },
+      "readiness": { "path": "/ready", "initialDelay": 5, "period": 10 }
+    }
+  },
+
+  "risk_assessment": {
+    "risks": [
+      {
+        "id": "R001",
+        "risk": "LLM token costs exceed budget per project",
+        "probability": "high",
+        "impact": "high",
+        "mitigation": "Hard token cap per project, cached responses for similar prompts, chunked generation with early termination"
+      },
+      {
+        "id": "R002",
+        "risk": "Generated code fails to compile consistently",
+        "probability": "medium",
+        "impact": "high",
+        "mitigation": "Self-healing loop with max 3 retries, template-based generation for boilerplate, validation before file write"
+      },
+      {
+        "id": "R003",
+        "risk": "Infinite retry loops consuming resources",
+        "probability": "medium",
+        "impact": "high",
+        "mitigation": "Hard retry limit of 3 per agent, circuit breaker pattern, structured error escalation"
+      },
+      {
+        "id": "R004",
+        "risk": "Sandbox container escape or resource abuse",
+        "probability": "low",
+        "impact": "critical",
+        "mitigation": "Docker containers with no network, resource limits (CPU, memory, disk), read-only filesystem, non-root user"
+      },
+      {
+        "id": "R005",
+        "risk": "MongoDB injection via generated code or user input",
+        "probability": "medium",
+        "impact": "high",
+        "mitigation": "express-mongo-sanitize on all inputs, Mongoose schema validation, Zod input schemas"
+      },
+      {
+        "id": "R006",
+        "risk": "Single point of failure in orchestrator",
+        "probability": "medium",
+        "impact": "high",
+        "mitigation": "BullMQ job persistence in Redis, job recovery on restart, phase state stored in MongoDB"
+      },
+      {
+        "id": "R007",
+        "risk": "LLM API rate limits or downtime",
+        "probability": "medium",
+        "impact": "medium",
+        "mitigation": "Retry with exponential backoff, queue-based execution smooths request rate, fallback model configuration"
+      }
+    ]
+  },
+
+  "assumptions": [
+    "Claude API (or compatible LLM API) is available and supports structured JSON output",
+    "Users have GitHub accounts for repo integration features",
+    "MongoDB Atlas or self-hosted MongoDB 7.x is available",
+    "Redis Stack 7.x is available (for BullMQ job queues)",
+    "Docker is available for sandbox execution of generated code",
+    "Kubernetes cluster is pre-provisioned for deployment",
+    "Container registry (Docker Hub, ECR, or GCR) is available for image storage",
+    "DNS and TLS certificates are managed externally",
+    "v1 generates only Node.js + MongoDB + Next.js applications",
+    "LLM token budget is tracked but not automatically billed in v1",
+    "Self-healing loop is limited to code fixes, not architecture changes",
+    "GitHub integration uses OAuth App (not GitHub App) in v1"
+  ]
+}

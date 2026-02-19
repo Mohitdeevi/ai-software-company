@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: promptcorp
+  labels:
+    app: promptcorp-redis
+    tier: cache
+    environment: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: promptcorp-redis
+  template:
+    metadata:
+      labels:
+        app: promptcorp-redis
+        tier: cache
+        environment: production
+    spec:
+      containers:
+        - name: redis
+          image: redis/redis-stack:7.4.0-v1
+          ports:
+            - containerPort: 6379
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          livenessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+            initialDelaySeconds: 10
+            periodSeconds: 30

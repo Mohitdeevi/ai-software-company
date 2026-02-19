@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  namespace: promptcorp
+  labels:
+    app: promptcorp-redis
+    tier: cache
+    environment: production
+spec:
+  type: ClusterIP
+  selector:
+    app: promptcorp-redis
+  ports:
+    - port: 6379
+      targetPort: 6379
+      protocol: TCP
